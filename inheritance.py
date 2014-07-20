@@ -5,11 +5,12 @@ class Descriptor:
     self.name = name
 
   def __get__(self, instance, cls):
+    #instance: current instance being manipulated
     print('Get', self.name)
     if instance is None:
       return self
     else:
-      return instance.__dict__[self.name]
+      return '$' + str(instance.__dict__[self.name])
 
   def __set__(self, instance, value):
     print('Set', self.name, value)
@@ -48,7 +49,7 @@ class Structure(metaclass=StructMeta):
 
 class Stock(Structure):
   _fields = ['name', 'shares', 'price']
-  shares = Descriptor('shares') # redefine .shares
+  price = Descriptor('price') # redefine .price
 
 class Points(Structure):
   _fields = ['x', 'y']
@@ -61,5 +62,5 @@ if __name__ == '__main__':
   s = Stock('AGG', 102, 23.43)
   print(p)
   print(s)
-  s.shares #descriptor intecepted
-  s.price
+  print(s.price) #descriptor intecepted
+  s.shares
