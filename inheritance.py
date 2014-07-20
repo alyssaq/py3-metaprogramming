@@ -1,5 +1,24 @@
 import inspect
 
+class Descriptor:
+  def __init__(self, name=None):
+    self.name = name
+
+  def __get__(self, instance, cls):
+    print('Get', self.name)
+    if instance is None:
+      return self
+    else:
+      return instance.__dict__[self.name]
+
+  def __set__(self, instance, value):
+    print('Set', self.name, value)
+    instance.__dict__[self.name] = value
+
+  def __delete__(self, instance):
+    print('Delete', self.name)
+    del instance.__dict__[self.name]
+
 def make_signature(names):
   return inspect.Signature(
       [inspect.Parameter(name, inspect.Parameter.POSITIONAL_OR_KEYWORD)
@@ -29,6 +48,7 @@ class Structure(metaclass=StructMeta):
 
 class Stock(Structure):
   _fields = ['name', 'shares', 'price']
+  shares = Descriptor('shares') # redefine .shares
 
 class Points(Structure):
   _fields = ['x', 'y']
@@ -41,3 +61,5 @@ if __name__ == '__main__':
   s = Stock('AGG', 102, 23.43)
   print(p)
   print(s)
+  s.shares #descriptor intecepted
+  s.price
