@@ -18,6 +18,10 @@ class Dot(object):
     self.y = y
     self.colour = colour
 
+  @property
+  def size(self):
+    return self.x + self.y
+
   @debug(prefix='**')
   def left(self, i=1):
     self.x += i
@@ -35,5 +39,6 @@ if __name__ == '__main__':
   s = Dot(2, 3)
   s.left(2)
   print(s)
+  print('size is:', s.size)
   s.funny()
   print('Num instances: ', Dot.get_num_instances())
